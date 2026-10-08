@@ -1,0 +1,8 @@
+/Users/sa20712762/legal-compliance-assistant/services/regulation-service/src/main/java/com/saksham/config/OpenApiConfig.java
+/Users/sa20712762/legal-compliance-assistant/services/regulation-service/src/main/java/com/saksham/regulationservice/RegulationServiceApplication.java
+/Users/sa20712762/legal-compliance-assistant/services/regulation-service/src/main/java/com/saksham/regulationservice/controller/RegulationController.java
+/Users/sa20712762/legal-compliance-assistant/services/regulation-service/src/main/java/com/saksham/regulationservice/entity/Regulation.java
+/Users/sa20712762/legal-compliance-assistant/services/regulation-service/src/main/java/com/saksham/regulationservice/exception/GlobalExceptionHandler.java
+/Users/sa20712762/legal-compliance-assistant/services/regulation-service/src/main/java/com/saksham/regulationservice/exception/ResourceNotFoundException.java
+/Users/sa20712762/legal-compliance-assistant/services/regulation-service/src/main/java/com/saksham/regulationservice/repository/RegulationRepository.java
+/Users/sa20712762/legal-compliance-assistant/services/regulation-service/src/main/java/com/saksham/regulationservice/service/RegulationService.java

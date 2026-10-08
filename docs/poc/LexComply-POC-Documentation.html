@@ -1,0 +1,2229 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>
+      LexComply Intelligence – Legal &amp; Compliance Research Assistant – POC
+      Documentation
+    </title>
+    <style>
+      body {
+        font-family: Calibri, "Segoe UI", Arial, sans-serif;
+        font-size: 11pt;
+        color: #1f2937;
+        line-height: 1.45;
+        margin: 40px;
+      }
+      h1 {
+        font-size: 24pt;
+        color: #312e81;
+        margin-bottom: 4px;
+      }
+      h2 {
+        font-size: 16pt;
+        color: #312e81;
+        border-bottom: 2px solid #4f46e5;
+        padding-bottom: 4px;
+        margin-top: 32px;
+        page-break-before: always;
+      }
+      h2.first {
+        page-break-before: avoid;
+      }
+      h3 {
+        font-size: 13pt;
+        color: #3730a3;
+        margin-top: 20px;
+      }
+      h4 {
+        font-size: 11.5pt;
+        color: #111827;
+        margin-top: 14px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 8px 0 14px;
+      }
+      th,
+      td {
+        border: 1px solid #c7cbd6;
+        padding: 5px 8px;
+        vertical-align: top;
+        font-size: 10pt;
+      }
+      th {
+        background: #e0e7ff;
+        color: #1e1b4b;
+        text-align: left;
+      }
+      pre,
+      code {
+        font-family: Consolas, Menlo, monospace;
+        font-size: 9.5pt;
+      }
+      pre {
+        background: #f3f4f6;
+        border: 1px solid #d1d5db;
+        padding: 10px;
+        white-space: pre-wrap;
+      }
+      .subtitle {
+        font-size: 13pt;
+        color: #4b5563;
+      }
+      .note {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 8px 12px;
+        margin: 10px 0;
+      }
+      .ok {
+        background: #d1fae5;
+        border-left: 4px solid #10b981;
+        padding: 8px 12px;
+        margin: 10px 0;
+      }
+      .cover td {
+        border: none;
+        padding: 3px 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>LexComply Intelligence</h1>
+    <div class="subtitle">
+      Legal &amp; Compliance Research Assistant – Proof of Concept Documentation
+    </div>
+    <br />
+    <table class="cover">
+      <tr>
+        <td><b>Document type</b></td>
+        <td>Technical &amp; Functional POC Reference</td>
+      </tr>
+      <tr>
+        <td><b>Version</b></td>
+        <td>1.0</td>
+      </tr>
+      <tr>
+        <td><b>Date</b></td>
+        <td>6 October 2026</td>
+      </tr>
+      <tr>
+        <td><b>Repository</b></td>
+        <td>legal-compliance-assistant</td>
+      </tr>
+      <tr>
+        <td><b>Audience</b></td>
+        <td>Developers, architects, interviewers, future maintainers</td>
+      </tr>
+    </table>
+
+    <h3>Contents</h3>
+    <ol>
+      <li>Executive Summary</li>
+      <li>Objectives and Scope</li>
+      <li>Technology Stack</li>
+      <li>System Architecture</li>
+      <li>Backend Microservices</li>
+      <li>Data Model</li>
+      <li>Frontend Architecture</li>
+      <li>Feature Catalogue</li>
+      <li>Intelligence Engines (Algorithms &amp; Formulas)</li>
+      <li>Role-Based Views and Access Matrix</li>
+      <li>Configuration Reference</li>
+      <li>Running the POC Locally</li>
+      <li>Testing and Quality</li>
+      <li>Known Limitations and Honest Disclosures</li>
+      <li>Demo Script</li>
+      <li>Interview Talking Points and Q&amp;A</li>
+      <li>Future Roadmap (Next-Generation GRC + AI Platform)</li>
+      <li>File Inventory</li>
+      <li>Glossary</li>
+    </ol>
+
+    <!-- ===================================================== -->
+    <h2 class="first">1. Executive Summary</h2>
+    <p>
+      <b>LexComply Intelligence</b> is a Legal &amp; Compliance Research
+      Assistant built as a microservices proof of concept. It manages policies,
+      regulations, compliance assessments, reports and users, and layers a
+      <b>compliance intelligence platform</b> on top: an Executive Command
+      Center, an explainable Risk Scoring Engine, a Compliance Health Score, a
+      Risk Heatmap, Gap Analysis, a Compliance Maturity Index, a Policy Approval
+      Workflow, an Audit Timeline, an Executive PDF Report, Role-Based
+      Dashboards, Global Search (⌘K), Dark Mode and an AI Compliance Copilot.
+    </p>
+    <p>
+      The platform is positioned in the same product category as Microsoft
+      Purview Compliance Manager, ServiceNow GRC, RSA Archer and MetricStream,
+      and the documentation below explains how each capability works, where it
+      lives in the code, and how it can evolve into a full AI-driven GRC
+      product.
+    </p>
+
+    <h3>Key outcomes</h3>
+    <ul>
+      <li>
+        Five Spring Boot microservices behind a Spring Cloud Gateway, backed by
+        PostgreSQL, documented with Swagger/OpenAPI.
+      </li>
+      <li>
+        A React enterprise shell (sidebar, top bar, command palette, Copilot
+        drawer) with live data refreshed every 60 seconds.
+      </li>
+      <li>
+        A pure, unit-tested intelligence layer (risk, maturity, gaps,
+        recommendations, workflow, copilot) with zero new npm dependencies.
+      </li>
+      <li>
+        Production build compiles with no ESLint warnings; 10 automated tests
+        pass.
+      </li>
+    </ul>
+
+    <!-- ===================================================== -->
+    <h2>2. Objectives and Scope</h2>
+    <h3>2.1 Objectives</h3>
+    <ol>
+      <li>
+        Demonstrate an end-to-end microservices architecture (React → API
+        Gateway → services → PostgreSQL).
+      </li>
+      <li>
+        Transform a CRUD application into a decision-support product for
+        executives, compliance officers, auditors and administrators.
+      </li>
+      <li>Make every score explainable (no “black box” numbers).</li>
+      <li>
+        Be AI-ready: define a contract for a future Retrieval-Augmented
+        Generation (RAG) service.
+      </li>
+    </ol>
+    <h3>2.2 In scope</h3>
+    <ul>
+      <li>
+        Registers: Policies, Regulations, Compliance Assessments, Reports,
+        Users.
+      </li>
+      <li>
+        Intelligence: health, risk, maturity, gaps, recommendations, heatmap,
+        analytics, timeline, workflow, executive report, copilot.
+      </li>
+      <li>
+        UX: enterprise layout, responsive design, dark mode, global search,
+        role-based dashboards, print-ready reports.
+      </li>
+    </ul>
+    <h3>2.3 Out of scope (POC)</h3>
+    <ul>
+      <li>
+        Authentication/authorization (JWT, Keycloak) – role switcher is a UI
+        persona only.
+      </li>
+      <li>Server-side persistence of workflow decisions and risk scores.</li>
+      <li>LLM / vector search integration (contract defined, not deployed).</li>
+    </ul>
+
+    <!-- ===================================================== -->
+    <h2>3. Technology Stack</h2>
+    <table>
+      <tr>
+        <th>Layer</th>
+        <th>Technology</th>
+        <th>Version / Notes</th>
+      </tr>
+      <tr>
+        <td>Frontend framework</td>
+        <td>React</td>
+        <td>19.x (Create React App, react-scripts 5.0.1)</td>
+      </tr>
+      <tr>
+        <td>Routing</td>
+        <td>React Router DOM</td>
+        <td>7.x (nested routes with layout &lt;Outlet/&gt;)</td>
+      </tr>
+      <tr>
+        <td>UI toolkit</td>
+        <td>Bootstrap</td>
+        <td>5.3.x (native <code>data-bs-theme</code> dark mode)</td>
+      </tr>
+      <tr>
+        <td>HTTP</td>
+        <td>Axios</td>
+        <td>1.x, shared client with interceptors</td>
+      </tr>
+      <tr>
+        <td>Charts</td>
+        <td>Custom SVG components</td>
+        <td>Gauge, Donut, BarList, Radar – no chart library</td>
+      </tr>
+      <tr>
+        <td>Backend</td>
+        <td>Spring Boot</td>
+        <td>4.1.1, Java 21</td>
+      </tr>
+      <tr>
+        <td>Gateway</td>
+        <td>Spring Cloud Gateway (WebMVC)</td>
+        <td>Spring Cloud 2025.1.3</td>
+      </tr>
+      <tr>
+        <td>Persistence</td>
+        <td>Spring Data JPA + PostgreSQL</td>
+        <td>
+          DB <code>legal_compliance_db</code>, <code>ddl-auto=update</code>
+        </td>
+      </tr>
+      <tr>
+        <td>Validation</td>
+        <td>Jakarta Bean Validation</td>
+        <td><code>@NotBlank</code>, <code>@Email</code></td>
+      </tr>
+      <tr>
+        <td>API docs</td>
+        <td>springdoc-openapi</td>
+        <td>Swagger UI per service</td>
+      </tr>
+      <tr>
+        <td>Testing</td>
+        <td>Jest + React Testing Library</td>
+        <td>Engine unit tests + App smoke test</td>
+      </tr>
+    </table>
+
+    <!-- ===================================================== -->
+    <h2>4. System Architecture</h2>
+    <h3>4.1 Logical architecture</h3>
+    <pre>
+                    +----------------------------------------------+
+                    |      React Platform UI  (localhost:3000)     |
+                    |  AppShell | Command Center | Copilot | ⌘K    |
+                    |  PlatformDataContext -> Intelligence Engines |
+                    +----------------------+-----------------------+
+                                           | HTTP + X-Correlation-Id
+                                           v
+                    +----------------------------------------------+
+                    |     API Gateway  (Spring Cloud Gateway)      |
+                    |     localhost:8082   CORS: localhost:3000    |
+                    +--+---------+----------+----------+--------+--+
+                       |         |          |          |        |
+                       v         v          v          v        v
+                  Policy    Regulation  Compliance   Report    User
+                  :8080       :8081       :8083       :8084    :8085
+                       \         |          |          |        /
+                        +--------+----------+----------+-------+
+                                           |
+                                           v
+                              PostgreSQL : legal_compliance_db
+</pre
+    >
+
+    <h3>4.2 Request flow</h3>
+    <ol>
+      <li>
+        <code>PlatformDataProvider</code> mounts and calls
+        <code>getPlatformSnapshot()</code>.
+      </li>
+      <li>
+        The snapshot probes all five services
+        <b>in parallel</b> (<code>Promise.all</code>) through the gateway and
+        records status (UP/DOWN) and latency per service.
+      </li>
+      <li>
+        Each request carries an <code>X-Correlation-Id</code> header (UUID) so a
+        UI action can be traced in gateway and service logs.
+      </li>
+      <li>
+        The raw datasets are passed to <code>buildIntelligence()</code> (pure
+        function) which returns health, risk, maturity, gaps, heatmap, analytics
+        and recommendations.
+      </li>
+      <li>
+        All pages consume the same memoised intelligence object; data refreshes
+        automatically every 60 seconds or on demand.
+      </li>
+      <li>
+        If a service is down, the platform shows a “Degraded” indicator instead
+        of failing completely.
+      </li>
+    </ol>
+
+    <!-- ===================================================== -->
+    <h2>5. Backend Microservices</h2>
+    <h3>5.1 Service catalogue</h3>
+    <table>
+      <tr>
+        <th>Service</th>
+        <th>Port</th>
+        <th>Base path</th>
+        <th>Entity / Table</th>
+        <th>Package</th>
+      </tr>
+      <tr>
+        <td>Policy Service</td>
+        <td>8080</td>
+        <td>/policies</td>
+        <td>Policy / policies</td>
+        <td>com.saksham.policyservice</td>
+      </tr>
+      <tr>
+        <td>Regulation Service</td>
+        <td>8081</td>
+        <td>/regulations</td>
+        <td>Regulation / regulations</td>
+        <td>com.saksham.regulationservice</td>
+      </tr>
+      <tr>
+        <td>Compliance Service</td>
+        <td>8083</td>
+        <td>/compliances</td>
+        <td>Compliance / compliances</td>
+        <td>com.saksham.complianceservice</td>
+      </tr>
+      <tr>
+        <td>Report Service</td>
+        <td>8084</td>
+        <td>/reports</td>
+        <td>Report / reports</td>
+        <td>com.saksham.reportservice</td>
+      </tr>
+      <tr>
+        <td>User Service</td>
+        <td>8085</td>
+        <td>/users</td>
+        <td>User / users</td>
+        <td>com.saksham.userservice</td>
+      </tr>
+      <tr>
+        <td>API Gateway</td>
+        <td>8082</td>
+        <td>routes all of the above</td>
+        <td>–</td>
+        <td>com.saksham.apigateway</td>
+      </tr>
+    </table>
+
+    <h3>5.2 REST endpoints (identical pattern per service)</h3>
+    <table>
+      <tr>
+        <th>Method</th>
+        <th>Path</th>
+        <th>Purpose</th>
+      </tr>
+      <tr>
+        <td>GET</td>
+        <td>/{resource}</td>
+        <td>List all</td>
+      </tr>
+      <tr>
+        <td>POST</td>
+        <td>/{resource}</td>
+        <td>Create (validated)</td>
+      </tr>
+      <tr>
+        <td>GET</td>
+        <td>/{resource}/{id}</td>
+        <td>Get by id (404 via ResourceNotFoundException)</td>
+      </tr>
+      <tr>
+        <td>PUT</td>
+        <td>/{resource}/{id}</td>
+        <td>Update</td>
+      </tr>
+      <tr>
+        <td>DELETE</td>
+        <td>/{resource}/{id}</td>
+        <td>Delete</td>
+      </tr>
+    </table>
+    <p>
+      Resources: <code>policies</code>, <code>regulations</code>,
+      <code>compliances</code>, <code>reports</code>, <code>users</code>.
+    </p>
+
+    <h3>5.3 API Gateway routing</h3>
+    <pre>
+spring.cloud.gateway.server.webmvc.routes[0]  Path=/policies/**     -> http://localhost:8080
+spring.cloud.gateway.server.webmvc.routes[1]  Path=/regulations/**  -> http://localhost:8081
+spring.cloud.gateway.server.webmvc.routes[2]  Path=/compliances/**  -> http://localhost:8083
+spring.cloud.gateway.server.webmvc.routes[3]  Path=/reports/**      -> http://localhost:8084
+spring.cloud.gateway.server.webmvc.routes[4]  Path=/users/**        -> http://localhost:8085
+</pre
+    >
+    <p>
+      <b>CORS</b> (CorsConfig): allowed origin
+      <code>http://localhost:3000</code>, all headers, all methods.
+    </p>
+
+    <h3>5.4 Cross-cutting backend features</h3>
+    <ul>
+      <li><b>Validation</b>: Jakarta Bean Validation on entities.</li>
+      <li>
+        <b>Error handling</b>: <code>GlobalExceptionHandler</code> +
+        <code>ResourceNotFoundException</code> (policy and regulation services).
+      </li>
+      <li><b>DTOs</b>: <code>PolicyResponseDTO</code> in policy-service.</li>
+      <li>
+        <b>OpenAPI</b>: <code>OpenApiConfig</code>; Swagger UI at
+        <code>http://localhost:&lt;port&gt;/swagger-ui.html</code>.
+      </li>
+      <li>
+        <b>Database</b>:
+        <code>jdbc:postgresql://localhost:5432/legal_compliance_db</code>,
+        schema managed by Hibernate (<code>ddl-auto=update</code>).
+      </li>
+    </ul>
+
+    <!-- ===================================================== -->
+    <h2>6. Data Model</h2>
+    <h3>6.1 Runtime entities (source of truth = JPA entities)</h3>
+    <table>
+      <tr>
+        <th>Entity</th>
+        <th>Fields</th>
+        <th>Validation</th>
+      </tr>
+      <tr>
+        <td>Policy</td>
+        <td>id (Integer, identity), title, description</td>
+        <td>title, description @NotBlank</td>
+      </tr>
+      <tr>
+        <td>Regulation</td>
+        <td>id, regulationName, country, description</td>
+        <td>all @NotBlank</td>
+      </tr>
+      <tr>
+        <td>Compliance</td>
+        <td>id, policyId, regulationId, status, remarks</td>
+        <td>status, remarks @NotBlank</td>
+      </tr>
+      <tr>
+        <td>Report</td>
+        <td>id, reportName, reportType, status, generatedDate (String)</td>
+        <td>name, type, status @NotBlank</td>
+      </tr>
+      <tr>
+        <td>User</td>
+        <td>id, username, email, role</td>
+        <td>username, role @NotBlank; email @Email</td>
+      </tr>
+    </table>
+
+    <h3>6.2 Relationships</h3>
+    <pre>
+Policy (1) ----&lt; Compliance &gt;---- (1) Regulation
+                      |
+          status + remarks  -> scored by Risk Engine
+Report  : evidence / reporting artefact (independent)
+User    : role used for persona-based views
+</pre
+    >
+
+    <div class="note">
+      <b>Schema drift:</b> <code>database/schema.sql</code> describes an older
+      design (<code>compliance_checks</code> with <code>risk_score</code>,
+      <code>created_at</code> timestamps, <code>users.password</code>). The
+      running services use the JPA entities above. Because the live data has no
+      risk score and no timestamps, risk is <i>computed</i> by the frontend Risk
+      Engine, and assessments in the timeline are ordered by record id.
+      Introducing Flyway migrations is the recommended fix (see Roadmap).
+    </div>
+
+    <!-- ===================================================== -->
+    <h2>7. Frontend Architecture</h2>
+    <h3>7.1 Folder structure</h3>
+    <pre>
+legal-compliance-ui/src
+├── api/
+│   └── httpClient.js            Shared Axios instance (base URL, correlation id, error normalisation)
+├── config/
+│   └── navigation.js            Sidebar sections, routes, icons, allowed roles
+├── context/
+│   ├── ThemeContext.jsx         Light/dark theme (localStorage + prefers-color-scheme)
+│   ├── RoleContext.jsx          Persona: Executive / Compliance Officer / Auditor / Admin
+│   └── PlatformDataContext.jsx  Parallel data load, 60s auto-refresh, memoised intelligence
+├── engine/
+│   ├── riskEngine.js            Risk scoring, health, maturity, gaps, heatmap, recommendations
+│   ├── workflowEngine.js        Policy approval state machine
+│   ├── copilotEngine.js         Grounded local answer engine
+│   └── engines.test.js          Unit tests
+├── services/
+│   ├── dashboardService.js      getPlatformSnapshot() – service probes + data
+│   ├── assistantService.js      Copilot gateway: local mode or remote RAG
+│   └── policy/regulation/compliance/report/userService.js
+├── layouts/
+│   ├── AppShell.jsx             Sidebar + Topbar + Outlet + Palette + Copilot, ⌘K shortcut
+│   ├── Sidebar.jsx              Role-filtered, collapsible navigation
+│   └── Topbar.jsx               Breadcrumb, search, live status, refresh, theme, Copilot, role
+├── components/
+│   ├── CommandPalette.jsx       Global search across all entities and pages
+│   ├── CopilotDrawer.jsx        AI Copilot chat drawer with citations
+│   ├── RequireRole.jsx          Route guard (UI-level)
+│   ├── charts/Charts.jsx        Gauge, DonutChart, BarList, RadarChart (SVG)
+│   └── ui/Icon.jsx, ui/Primitives.jsx  PageHeader, Panel, KpiCard, badges, empty/loading states
+├── pages/
+│   ├── CommandCenter.jsx  Analytics.jsx  RiskHeatmap.jsx  GapAnalysis.jsx
+│   ├── PolicyWorkflow.jsx AuditTimeline.jsx ExecutiveReport.jsx
+│   └── Policies.jsx Regulations.jsx Compliances.jsx Reports.jsx Users.jsx (registers)
+├── styles/theme.css             Design tokens, layout, components, dark mode, print styles
+├── App.js                       Providers + route table generated from navigation config
+└── setupTests.js                jest-dom + TextEncoder polyfill
+</pre
+    >
+
+    <h3>7.2 Provider hierarchy</h3>
+    <pre>
+ThemeProvider
+ └─ RoleProvider
+     └─ PlatformDataProvider
+         └─ BrowserRouter
+             └─ AppShell (layout route)
+                 └─ RequireRole(roles) -> Page
+</pre
+    >
+
+    <h3>7.3 Design principles</h3>
+    <ul>
+      <li>
+        <b>Separation of concerns</b>: engines are framework-free pure
+        functions; React only renders.
+      </li>
+      <li>
+        <b>Single source of truth</b>: one data snapshot, one intelligence
+        object shared by every page.
+      </li>
+      <li>
+        <b>Configuration-driven navigation</b>: routes, sidebar and role access
+        come from <code>navigation.js</code>.
+      </li>
+      <li>
+        <b>Graceful degradation</b>: per-service health probing; partial data
+        still renders.
+      </li>
+      <li>
+        <b>Design tokens</b>: CSS variables drive light/dark themes and chart
+        colours.
+      </li>
+      <li>
+        <b>Accessibility</b>: focus-visible outlines, ARIA labels,
+        reduced-motion support, colour + text for status.
+      </li>
+    </ul>
+
+    <!-- ===================================================== -->
+    <h2>8. Feature Catalogue</h2>
+    <table>
+      <tr>
+        <th>#</th>
+        <th>Feature</th>
+        <th>Route / Location</th>
+        <th>What it does</th>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>Executive Command Center</td>
+        <td>/</td>
+        <td>
+          Role-specific KPIs, Health gauge, maturity level, assessment status
+          donut, top risks, AI recommendations, residual risk by regulation.
+          Admin view shows live microservice health and users by role.
+        </td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Compliance Health Score</td>
+        <td>Command Center, Report</td>
+        <td>
+          0–100 score = 100 − average residual risk; bands Strong / Watch /
+          Critical.
+        </td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Risk Scoring Engine</td>
+        <td>engine/riskEngine.js</td>
+        <td>
+          Scores every assessment from status, remark signals, jurisdiction and
+          framework; returns human-readable drivers.
+        </td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Risk Heatmap</td>
+        <td>/risk-heatmap</td>
+        <td>
+          Policy × Regulation matrix coloured by risk level; empty hatched cells
+          are coverage gaps; click a cell for drill-down with “why this score”.
+        </td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Compliance Analytics</td>
+        <td>/analytics</td>
+        <td>
+          Maturity radar + dimension bars, status donut, risk-level donut, risk
+          by regulation, regulatory footprint, report pipeline. Jurisdiction
+          cross-filter recomputes all charts.
+        </td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>Compliance Maturity Index</td>
+        <td>/analytics</td>
+        <td>
+          Five-level CMMI-style index from four weighted dimensions with
+          next-level guidance.
+        </td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>Gap Analysis</td>
+        <td>/gap-analysis</td>
+        <td>
+          Uncovered regulations, unassessed policies, failing controls,
+          data-integrity (orphan) issues.
+        </td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>AI Recommendations</td>
+        <td>Command Center, Copilot, Report</td>
+        <td>Prioritised P1–P3 actions ranked by expected health uplift.</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td>Policy Approval Workflow</td>
+        <td>/workflow</td>
+        <td>
+          Kanban across Draft → Legal Review → Compliance Review → Executive
+          Approval → Published (+ Rejected). Role-gated transitions, risk
+          control gate, approval trail.
+        </td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td>Audit Timeline</td>
+        <td>/timeline</td>
+        <td>
+          Unified evidence trail of approvals, reports and assessments with
+          filters.
+        </td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td>Executive PDF Report</td>
+        <td>/executive-report</td>
+        <td>
+          Board briefing: narrative summary, KPIs, material risks,
+          recommendations, methodology, sign-off block. Export via browser print
+          to PDF.
+        </td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td>AI Compliance Copilot</td>
+        <td>Top bar “Copilot”</td>
+        <td>
+          Chat drawer with starter prompts, grounded answers, clickable items,
+          numbered citations, follow-ups.
+        </td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td>Global Search / Command Palette</td>
+        <td>⌘K / Ctrl+K</td>
+        <td>
+          Search pages, policies, regulations, risks, reports, users (admin);
+          keyboard navigation; “Ask Copilot” fallback.
+        </td>
+      </tr>
+      <tr>
+        <td>14</td>
+        <td>Role-Based Dashboards</td>
+        <td>Top bar role selector</td>
+        <td>
+          Executive, Compliance Officer, Auditor, Administrator personas with
+          different KPIs, navigation and access.
+        </td>
+      </tr>
+      <tr>
+        <td>15</td>
+        <td>Dark Mode</td>
+        <td>Top bar moon/sun</td>
+        <td>Bootstrap 5.3 theme switching persisted to localStorage.</td>
+      </tr>
+      <tr>
+        <td>16</td>
+        <td>Enterprise Shell</td>
+        <td>layouts/</td>
+        <td>
+          Collapsible sidebar, sticky blurred top bar, breadcrumb, responsive
+          mobile drawer.
+        </td>
+      </tr>
+      <tr>
+        <td>17</td>
+        <td>Live Platform Status</td>
+        <td>Top bar pill, Admin view</td>
+        <td>Live/Degraded indicator, last sync time, per-service latency.</td>
+      </tr>
+      <tr>
+        <td>18</td>
+        <td>Registers</td>
+        <td>/policies, /regulations, /compliances, /reports, /users</td>
+        <td>Existing data modules rendered inside the new shell.</td>
+      </tr>
+    </table>
+
+    <!-- ===================================================== -->
+    <h2>9. Intelligence Engines (Algorithms &amp; Formulas)</h2>
+
+    <h3>9.1 Status classification</h3>
+    <p>
+      Status text is normalised to lower case and matched in order
+      (non-compliant is tested before compliant):
+    </p>
+    <table>
+      <tr>
+        <th>Pattern (regex)</th>
+        <th>Class</th>
+        <th>Severity</th>
+      </tr>
+      <tr>
+        <td>(non|not)[ _-]?compliant | fail | violat | breach</td>
+        <td>NON_COMPLIANT</td>
+        <td>1.0</td>
+      </tr>
+      <tr>
+        <td>partial</td>
+        <td>PARTIAL</td>
+        <td>0.6</td>
+      </tr>
+      <tr>
+        <td>pending | progress | review | open | draft</td>
+        <td>UNDER_REVIEW</td>
+        <td>0.4</td>
+      </tr>
+      <tr>
+        <td>compliant | pass | approved | closed | complete</td>
+        <td>COMPLIANT</td>
+        <td>0.0</td>
+      </tr>
+      <tr>
+        <td>(anything else)</td>
+        <td>UNKNOWN</td>
+        <td>0.5</td>
+      </tr>
+    </table>
+
+    <h3>9.2 Remark risk signals</h3>
+    <table>
+      <tr>
+        <th>Pattern</th>
+        <th>Signal</th>
+        <th>Weight</th>
+      </tr>
+      <tr>
+        <td>breach | leak | incident</td>
+        <td>Incident indicator</td>
+        <td>+12</td>
+      </tr>
+      <tr>
+        <td>penalt | fine | sanction | enforcement</td>
+        <td>Regulatory penalty exposure</td>
+        <td>+10</td>
+      </tr>
+      <tr>
+        <td>critical | urgent | severe</td>
+        <td>Escalated severity</td>
+        <td>+8</td>
+      </tr>
+      <tr>
+        <td>expired | overdue | outdated | lapsed</td>
+        <td>Lapsed control</td>
+        <td>+6</td>
+      </tr>
+      <tr>
+        <td>missing | absent | no evidence | not documented | gap</td>
+        <td>Missing evidence</td>
+        <td>+6</td>
+      </tr>
+    </table>
+
+    <h3>9.3 Multipliers</h3>
+    <table>
+      <tr>
+        <th>Factor</th>
+        <th>Rule</th>
+        <th>Multiplier</th>
+      </tr>
+      <tr>
+        <td>Jurisdiction</td>
+        <td>EU / European Union</td>
+        <td>×1.20</td>
+      </tr>
+      <tr>
+        <td>Jurisdiction</td>
+        <td>USA / US / United States / UK / United Kingdom</td>
+        <td>×1.10</td>
+      </tr>
+      <tr>
+        <td>Jurisdiction</td>
+        <td>India</td>
+        <td>×1.05</td>
+      </tr>
+      <tr>
+        <td>Framework</td>
+        <td>
+          GDPR, HIPAA, SOX, PCI, DPDP, CCPA, Basel, DORA, NIS2, ISO 27001 in
+          regulation name
+        </td>
+        <td>×1.15</td>
+      </tr>
+    </table>
+
+    <h3>9.4 Residual risk score</h3>
+    <pre>
+if status = COMPLIANT:
+    risk = 0
+else:
+    raw  = (severity × 70 + Σ signal weights) × jurisdiction × framework
+    risk = clamp(round(raw), 1, 100)
+</pre
+    >
+    <p>
+      Example: NON_COMPLIANT GDPR (EU) with remarks “Breach risk, penalty
+      exposure” → (70 + 12 + 10) × 1.2 × 1.15 = 126.96 → <b>100 (Critical)</b>.
+    </p>
+    <p>
+      Every score returns a <b>drivers</b> list (e.g. “Status: Non-Compliant”,
+      “Incident indicator in remarks (+12)”, “Jurisdiction weight EU (x1.2)”) –
+      this is shown in the heatmap drill-down as “Why this score”.
+    </p>
+
+    <h3>9.5 Risk levels</h3>
+    <table>
+      <tr>
+        <th>Level</th>
+        <th>Score</th>
+        <th>Colour</th>
+      </tr>
+      <tr>
+        <td>Critical</td>
+        <td>≥ 85</td>
+        <td>Dark red</td>
+      </tr>
+      <tr>
+        <td>High</td>
+        <td>65 – 84</td>
+        <td>Red</td>
+      </tr>
+      <tr>
+        <td>Medium</td>
+        <td>40 – 64</td>
+        <td>Amber</td>
+      </tr>
+      <tr>
+        <td>Low</td>
+        <td>&lt; 40</td>
+        <td>Green</td>
+      </tr>
+    </table>
+
+    <h3>9.6 Compliance Health Score</h3>
+    <pre>
+Health = round(100 − mean(risk of all assessments))       (null when there are no assessments)
+Bands:  ≥ 85 Strong   |   70–84 Watch   |   &lt; 70 Critical
+</pre
+    >
+
+    <h3>9.7 Coverage and rates</h3>
+    <pre>
+Policy coverage      = policies with ≥1 assessment / total policies
+Regulation coverage  = regulations with ≥1 assessment / total regulations
+Compliance rate      = COMPLIANT assessments / total assessments
+</pre
+    >
+
+    <h3>9.8 Compliance Maturity Index</h3>
+    <table>
+      <tr>
+        <th>Dimension</th>
+        <th>Definition</th>
+        <th>Weight</th>
+      </tr>
+      <tr>
+        <td>Control Coverage</td>
+        <td>average(policy coverage, regulation coverage)</td>
+        <td>30%</td>
+      </tr>
+      <tr>
+        <td>Control Effectiveness</td>
+        <td>compliance rate</td>
+        <td>40%</td>
+      </tr>
+      <tr>
+        <td>Assessment Completeness</td>
+        <td>1 − (under review / assessments)</td>
+        <td>15%</td>
+      </tr>
+      <tr>
+        <td>Reporting Cadence</td>
+        <td>min(1, reports / regulations)</td>
+        <td>15%</td>
+      </tr>
+    </table>
+    <pre>Index = round(100 × Σ weight × value)</pre>
+    <table>
+      <tr>
+        <th>Level</th>
+        <th>Name</th>
+        <th>Index ≥</th>
+        <th>Meaning</th>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>Initial</td>
+        <td>0</td>
+        <td>Ad-hoc controls with limited visibility</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Repeatable</td>
+        <td>20</td>
+        <td>Core controls exist but coverage is inconsistent</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Defined</td>
+        <td>40</td>
+        <td>Standardised assessments across key regulations</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Managed</td>
+        <td>60</td>
+        <td>Quantitatively measured and reported compliance</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Optimizing</td>
+        <td>80</td>
+        <td>Continuous, data-driven improvement</td>
+      </tr>
+    </table>
+    <p>
+      The weakest dimension is reported as the focus area for reaching the next
+      level.
+    </p>
+
+    <h3>9.9 Gap Analysis</h3>
+    <ul>
+      <li>
+        <b>Uncovered regulations</b> – no assessment; exposure High if a
+        high-impact framework, otherwise Medium.
+      </li>
+      <li>
+        <b>Unassessed policies</b> – policy never tested against any regulation.
+      </li>
+      <li>
+        <b>Failing controls</b> – assessments with risk ≥ 65 (High/Critical).
+      </li>
+      <li>
+        <b>Data-integrity issues</b> – assessments referencing a policy or
+        regulation id that does not exist.
+      </li>
+    </ul>
+
+    <h3>9.10 Recommendation engine</h3>
+    <table>
+      <tr>
+        <th>Source</th>
+        <th>Priority</th>
+        <th>Uplift</th>
+      </tr>
+      <tr>
+        <td>Each open finding (risk &gt; 0)</td>
+        <td>P1 if ≥ 65, P2 if ≥ 40, else P3</td>
+        <td>round(risk / number of assessments) health points</td>
+      </tr>
+      <tr>
+        <td>Uncovered regulation</td>
+        <td>P1 (high-impact framework) / P2</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td>Unassessed policy</td>
+        <td>P3</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td>Next maturity level</td>
+        <td>P2</td>
+        <td>–</td>
+      </tr>
+    </table>
+    <p>Sorted by priority, then by uplift (largest first).</p>
+
+    <h3>9.11 Policy Approval Workflow (state machine)</h3>
+    <table>
+      <tr>
+        <th>From</th>
+        <th>To</th>
+        <th>Action</th>
+        <th>Allowed roles</th>
+        <th>Gate</th>
+      </tr>
+      <tr>
+        <td>DRAFT</td>
+        <td>LEGAL_REVIEW</td>
+        <td>Submit for Legal Review</td>
+        <td>Compliance Officer, Admin</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td>LEGAL_REVIEW</td>
+        <td>COMPLIANCE_REVIEW</td>
+        <td>Legal Sign-off</td>
+        <td>Compliance Officer, Admin</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td>COMPLIANCE_REVIEW</td>
+        <td>EXECUTIVE_APPROVAL</td>
+        <td>Compliance Sign-off</td>
+        <td>Compliance Officer, Admin</td>
+        <td><b>Blocked while any linked assessment has risk ≥ 65</b></td>
+      </tr>
+      <tr>
+        <td>EXECUTIVE_APPROVAL</td>
+        <td>PUBLISHED</td>
+        <td>Approve &amp; Publish</td>
+        <td>Executive, Admin</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td>LEGAL / COMPLIANCE REVIEW</td>
+        <td>REJECTED</td>
+        <td>Reject</td>
+        <td>Compliance Officer, Admin</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td>EXECUTIVE_APPROVAL</td>
+        <td>REJECTED</td>
+        <td>Reject</td>
+        <td>Executive, Admin</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td>REJECTED</td>
+        <td>DRAFT</td>
+        <td>Reopen as Draft</td>
+        <td>Compliance Officer, Admin</td>
+        <td>–</td>
+      </tr>
+    </table>
+    <p>
+      <b>Initial stage</b> is derived from evidence: no assessments → DRAFT; all
+      compliant → PUBLISHED; otherwise → COMPLIANCE_REVIEW. Manual decisions
+      (with actor, role and timestamp) are stored in
+      <code>localStorage</code> key <code>lca.workflow.v1</code> and appear in
+      the approval trail and Audit Timeline.
+    </p>
+
+    <h3>9.12 Copilot engine (local intelligence mode)</h3>
+    <p>
+      Order of resolution: (1) entity match – a policy title or regulation name
+      in the question; (2) intent match; (3) help response.
+    </p>
+    <table>
+      <tr>
+        <th>Intent</th>
+        <th>Trigger words</th>
+        <th>Answer</th>
+      </tr>
+      <tr>
+        <td>Summary</td>
+        <td>summary, brief, executive, board, overview, posture</td>
+        <td>
+          Executive brief: health, maturity, risks, coverage, top 3
+          recommendations
+        </td>
+      </tr>
+      <tr>
+        <td>Health</td>
+        <td>health, score, how are we, compliant are</td>
+        <td>Health score, method, compliant vs open findings</td>
+      </tr>
+      <tr>
+        <td>Maturity</td>
+        <td>matur, cmmi, level</td>
+        <td>Level, weakest dimension, all dimensions</td>
+      </tr>
+      <tr>
+        <td>Gaps</td>
+        <td>gap, uncovered, missing, not covered, unassessed</td>
+        <td>Uncovered regulations, unassessed policies, failing controls</td>
+      </tr>
+      <tr>
+        <td>Recommend</td>
+        <td>
+          recommend, what should, next step, fix, remediat, priorit, action
+        </td>
+        <td>Top 5 recommendations with uplift</td>
+      </tr>
+      <tr>
+        <td>Risk</td>
+        <td>
+          risk, critical, non-compliant, fail, violation, breach, exposure
+        </td>
+        <td>High/Critical findings with citations</td>
+      </tr>
+    </table>
+    <p>
+      Every answer contains: title, summary lines, clickable items (navigate to
+      the relevant page), numbered citations, follow-up suggestions, and a
+      <code>grounded: true</code> flag.
+    </p>
+
+    <h3>9.13 RAG-ready contract (future)</h3>
+    <pre>
+REACT_APP_ASSISTANT_MODE=remote
+
+POST /assistant/ask
+Request : { "question": "...", "context": { "healthScore": 72, "maturityLevel": 3 } }
+Response: { "title": "...",
+            "summary": ["..."],
+            "items": [ { "label": "...", "detail": "...", "tone": "danger", "route": "/risk-heatmap" } ],
+            "citations": [ { "label": "GDPR Art.32", "route": "/regulations" } ] }
+
+On failure the UI falls back to the local engine and shows “RAG service unavailable”.
+</pre
+    >
+
+    <!-- ===================================================== -->
+    <h2>10. Role-Based Views and Access Matrix</h2>
+    <table>
+      <tr>
+        <th>Page</th>
+        <th>Executive</th>
+        <th>Compliance Officer</th>
+        <th>Auditor</th>
+        <th>Admin</th>
+      </tr>
+      <tr>
+        <td>Command Center</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+      </tr>
+      <tr>
+        <td>Compliance Analytics</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+      </tr>
+      <tr>
+        <td>Risk Heatmap</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+      </tr>
+      <tr>
+        <td>Gap Analysis</td>
+        <td>–</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+      </tr>
+      <tr>
+        <td>Policy Approvals</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>–</td>
+        <td>✔</td>
+      </tr>
+      <tr>
+        <td>Audit Timeline</td>
+        <td>–</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+      </tr>
+      <tr>
+        <td>Executive Report</td>
+        <td>✔</td>
+        <td>–</td>
+        <td>✔</td>
+        <td>✔</td>
+      </tr>
+      <tr>
+        <td>Policies / Regulations / Assessments / Reports</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+      </tr>
+      <tr>
+        <td>Users &amp; Access</td>
+        <td>–</td>
+        <td>–</td>
+        <td>–</td>
+        <td>✔</td>
+      </tr>
+    </table>
+
+    <h3>Command Center KPIs per role</h3>
+    <table>
+      <tr>
+        <th>Role</th>
+        <th>Title</th>
+        <th>KPIs</th>
+      </tr>
+      <tr>
+        <td>Executive</td>
+        <td>Executive Command Center</td>
+        <td>
+          Health Score, Maturity Index, High-Risk Findings, Regulatory Coverage
+        </td>
+      </tr>
+      <tr>
+        <td>Compliance Officer</td>
+        <td>Compliance Operations</td>
+        <td>
+          Open Findings, Under Review, Unassessed Policies, Uncovered
+          Regulations
+        </td>
+      </tr>
+      <tr>
+        <td>Auditor</td>
+        <td>Assurance Workspace</td>
+        <td>Assessments, Total Gaps, Integrity Issues, Reports on File</td>
+      </tr>
+      <tr>
+        <td>Administrator</td>
+        <td>Platform Operations</td>
+        <td>
+          Services Online, Users, Records Managed, Health Score + Microservice
+          Health panel
+        </td>
+      </tr>
+    </table>
+    <div class="note">
+      The role selector is a <b>UI persona</b>. Real authorization must be
+      enforced at the API Gateway with JWT role claims (Spring Security /
+      Keycloak).
+    </div>
+
+    <!-- ===================================================== -->
+    <h2>11. Configuration Reference</h2>
+    <h3>11.1 Environment variables (frontend, <code>.env</code>)</h3>
+    <table>
+      <tr>
+        <th>Variable</th>
+        <th>Default</th>
+        <th>Purpose</th>
+      </tr>
+      <tr>
+        <td>REACT_APP_API_BASE_URL</td>
+        <td>http://localhost:8082</td>
+        <td>API Gateway base URL</td>
+      </tr>
+      <tr>
+        <td>REACT_APP_ASSISTANT_MODE</td>
+        <td>local</td>
+        <td>
+          <code>remote</code> sends Copilot questions to
+          <code>/assistant/ask</code>
+        </td>
+      </tr>
+    </table>
+    <h3>11.2 Browser storage keys</h3>
+    <table>
+      <tr>
+        <th>Key</th>
+        <th>Content</th>
+      </tr>
+      <tr>
+        <td>lca.theme</td>
+        <td>light | dark</td>
+      </tr>
+      <tr>
+        <td>lca.role</td>
+        <td>EXECUTIVE | COMPLIANCE_OFFICER | AUDITOR | ADMIN</td>
+      </tr>
+      <tr>
+        <td>lca.workflow.v1</td>
+        <td>Policy workflow stages and approval history (JSON)</td>
+      </tr>
+    </table>
+    <h3>11.3 Platform constants</h3>
+    <ul>
+      <li>
+        Auto-refresh interval: 60 seconds
+        (<code>PlatformDataContext.jsx</code>).
+      </li>
+      <li>HTTP timeout: 10 seconds (<code>httpClient.js</code>).</li>
+      <li>Command palette: max 12 results.</li>
+    </ul>
+
+    <!-- ===================================================== -->
+    <h2>12. Running the POC Locally</h2>
+    <h3>12.1 Prerequisites</h3>
+    <ul>
+      <li>
+        Java 21, Maven wrapper (included), Node.js 18+ and npm, PostgreSQL
+        running on 5432.
+      </li>
+      <li>
+        Database <code>legal_compliance_db</code> created; datasource username
+        set in each service’s <code>application.properties</code>.
+      </li>
+    </ul>
+    <h3>12.2 Start order</h3>
+    <pre>
+# 1. Database
+pg_isready
+
+# 2. Microservices (one terminal each)
+cd services/policy-service      &amp;&amp; bash mvnw spring-boot:run   # :8080
+cd services/regulation-service  &amp;&amp; bash mvnw spring-boot:run   # :8081
+cd services/compliance-service  &amp;&amp; bash mvnw spring-boot:run   # :8083
+cd services/report-service      &amp;&amp; bash mvnw spring-boot:run   # :8084
+cd services/user-service        &amp;&amp; bash mvnw spring-boot:run   # :8085
+
+# 3. Gateway
+cd services/api-gateway         &amp;&amp; bash mvnw spring-boot:run   # :8082
+
+# 4. Frontend
+cd legal-compliance-ui &amp;&amp; npm install &amp;&amp; npm start              # :3000
+</pre
+    >
+    <h3>12.3 Useful URLs</h3>
+    <ul>
+      <li>Application: http://localhost:3000</li>
+      <li>Gateway sample: http://localhost:8082/policies</li>
+      <li>
+        Swagger UI: http://localhost:8080/swagger-ui.html (replace port per
+        service)
+      </li>
+    </ul>
+    <h3>12.4 Sample data that demonstrates the engine well</h3>
+    <pre>
+Regulations: GDPR (EU), HIPAA (USA), IT Act (India), SOX (USA)
+Compliances:
+  policyId=1, regulationId=GDPR,  status=NON_COMPLIANT, remarks="Breach risk, penalty exposure"
+  policyId=2, regulationId=GDPR,  status=PARTIAL,       remarks="Missing MFA evidence"
+  policyId=2, regulationId=IT Act,status=COMPLIANT,     remarks="Evidence verified"
+  policyId=3, regulationId=SOX,   status=PENDING,       remarks="Awaiting review"
+Leave one regulation and one policy unmapped to show coverage gaps.
+</pre
+    >
+
+    <!-- ===================================================== -->
+    <h2>13. Testing and Quality</h2>
+    <pre>
+cd legal-compliance-ui
+CI=true npx react-scripts test --watchAll=false
+npx react-scripts build
+</pre
+    >
+    <table>
+      <tr>
+        <th>Suite</th>
+        <th>Tests</th>
+        <th>Covers</th>
+      </tr>
+      <tr>
+        <td>engine/engines.test.js</td>
+        <td>9</td>
+        <td>
+          Status classification order; jurisdiction/framework/signal weighting
+          and drivers; zero risk for compliant; health, coverage, gaps,
+          recommendations; empty platform; workflow derivation, role gating and
+          control gate; approval trail; copilot grounding and entity answers
+        </td>
+      </tr>
+      <tr>
+        <td>App.test.js</td>
+        <td>1</td>
+        <td>
+          Smoke test: app shell and Executive Command Center render (Axios
+          mocked)
+        </td>
+      </tr>
+    </table>
+    <div class="ok">
+      Result at time of writing: 2 suites, 10 tests passing; production build
+      compiled with no ESLint warnings.
+    </div>
+    <p>
+      <b>Test configuration notes:</b> <code>package.json</code> maps
+      <code>react-router/dom</code> for Jest (React Router v7 uses package
+      exports), and <code>setupTests.js</code> polyfills
+      <code>TextEncoder/TextDecoder</code> for jsdom.
+    </p>
+
+    <!-- ===================================================== -->
+    <h2>14. Known Limitations and Honest Disclosures</h2>
+    <table>
+      <tr>
+        <th>Area</th>
+        <th>Limitation</th>
+        <th>Recommended fix</th>
+      </tr>
+      <tr>
+        <td>Risk scoring</td>
+        <td>Computed in the browser; not persisted</td>
+        <td>Move to an intelligence-service; store risk snapshots</td>
+      </tr>
+      <tr>
+        <td>Copilot</td>
+        <td>Rule-based, grounded local engine – not an LLM</td>
+        <td>Spring AI + pgvector RAG service implementing /assistant/ask</td>
+      </tr>
+      <tr>
+        <td>Workflow</td>
+        <td>Decisions stored in browser localStorage</td>
+        <td>
+          policy_approvals table + transition endpoint enforced server-side
+        </td>
+      </tr>
+      <tr>
+        <td>Security</td>
+        <td>No authentication; role switcher is UI only</td>
+        <td>Keycloak/OIDC + JWT validation at the gateway</td>
+      </tr>
+      <tr>
+        <td>Timeline</td>
+        <td>Assessments lack timestamps; ordered by id</td>
+        <td>Audit columns (createdAt/updatedAt) + audit_log table</td>
+      </tr>
+      <tr>
+        <td>Schema</td>
+        <td>schema.sql differs from JPA entities; ddl-auto=update</td>
+        <td>Flyway versioned migrations</td>
+      </tr>
+      <tr>
+        <td>Forecasting</td>
+        <td>No historical data</td>
+        <td>risk_snapshots table captured nightly</td>
+      </tr>
+      <tr>
+        <td>Unused files</td>
+        <td>pages/Dashboard.jsx and components/Navbar.jsx no longer routed</td>
+        <td>Delete when convenient</td>
+      </tr>
+    </table>
+
+    <!-- ===================================================== -->
+    <h2>15. Demo Script (5–7 minutes)</h2>
+    <ol>
+      <li>
+        <b>Executive persona</b> – open Command Center: health gauge, maturity
+        level, KPIs, top risks.
+      </li>
+      <li>
+        Click <b>“Brief me”</b> – Copilot produces a grounded executive summary
+        with citations.
+      </li>
+      <li>
+        Open <b>Risk Heatmap</b> – click a red cell – show “Why this score”
+        drivers; click a hatched cell – coverage gap.
+      </li>
+      <li>
+        Open <b>Analytics</b> – change jurisdiction filter – all charts
+        recompute; show maturity radar.
+      </li>
+      <li>
+        Switch to <b>Compliance Officer</b> – Policy Approvals – try Compliance
+        Sign-off on a risky policy – <b>control gate blocks it</b>.
+      </li>
+      <li>
+        Switch to <b>Auditor</b> – Gap Analysis (integrity issues) and Audit
+        Timeline with approval trail.
+      </li>
+      <li>
+        Switch to <b>Admin</b> – live microservice health with latency; Users
+        &amp; Access.
+      </li>
+      <li>Press <b>⌘K</b> – search “GDPR” – choose “Ask Copilot”.</li>
+      <li>Toggle <b>dark mode</b>; resize to mobile.</li>
+      <li>Open <b>Executive Report</b> – Export PDF.</li>
+    </ol>
+
+    <!-- ===================================================== -->
+    <h2>16. Interview Talking Points and Q&amp;A</h2>
+    <h3>16.1 Talking points</h3>
+    <ul>
+      <li>
+        <b>Microservices + API Gateway</b>: single entry point, CORS
+        centralised, independent deployability per domain.
+      </li>
+      <li>
+        <b>Explainable risk</b>: deterministic, unit-tested scoring with drivers
+        – auditors can reproduce any number.
+      </li>
+      <li>
+        <b>Resilience</b>: parallel probing with per-service status; degraded
+        mode instead of blank screens.
+      </li>
+      <li><b>Observability-ready</b>: correlation id on every request.</li>
+      <li>
+        <b>Separation of concerns</b>: pure engines vs. React rendering; easy to
+        migrate engines server-side.
+      </li>
+      <li>
+        <b>Governance by design</b>: maker-checker workflow, role gating, risk
+        control gate, approval trail.
+      </li>
+      <li>
+        <b>AI readiness</b>: grounded answers with citations today; documented
+        RAG contract for tomorrow.
+      </li>
+      <li>
+        <b>Zero added dependencies</b>: custom SVG charts and icons keep the
+        bundle lean and theme-aware.
+      </li>
+    </ul>
+    <h3>16.2 Likely questions</h3>
+    <table>
+      <tr>
+        <th>Question</th>
+        <th>Answer outline</th>
+      </tr>
+      <tr>
+        <td>Why compute risk on the client?</td>
+        <td>
+          The current data model has no risk field; computing client-side proved
+          the model quickly. Engines are pure functions, so moving them to an
+          intelligence-service is a lift-and-shift.
+        </td>
+      </tr>
+      <tr>
+        <td>How do you prevent the Copilot from hallucinating?</td>
+        <td>
+          Local mode only uses platform data and always cites records. In RAG
+          mode: permission-filtered retrieval, mandatory citations, refusal on
+          low evidence, evaluation (faithfulness) in CI.
+        </td>
+      </tr>
+      <tr>
+        <td>How is RBAC enforced?</td>
+        <td>
+          Today UI-only. Production: Keycloak OIDC, JWT validated at the
+          gateway, role claims checked per route and in services; row-level
+          security in PostgreSQL for tenancy.
+        </td>
+      </tr>
+      <tr>
+        <td>What happens if a service is down?</td>
+        <td>
+          Promise.all over individually-caught probes; the service is marked
+          DOWN, its data is empty, the UI shows “Degraded”, everything else
+          works.
+        </td>
+      </tr>
+      <tr>
+        <td>How would you scale this?</td>
+        <td>
+          Kubernetes + HPA, outbox/Kafka events, caching at the gateway, read
+          models for analytics, OpenTelemetry tracing.
+        </td>
+      </tr>
+      <tr>
+        <td>Why a maturity index?</td>
+        <td>
+          Executives need a trajectory, not just a snapshot; CMMI-style levels
+          are familiar to boards and auditors.
+        </td>
+      </tr>
+    </table>
+
+    <!-- ===================================================== -->
+    <h2>17. Future Roadmap – Next-Generation GRC + AI Platform</h2>
+    <h3>17.1 Ranked capabilities (by ROI and impact)</h3>
+    <table>
+      <tr>
+        <th>Rank</th>
+        <th>Capability</th>
+        <th>Focus areas</th>
+        <th>Effort</th>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>Compliance Data Fabric &amp; Obligation Model</td>
+        <td>Data fabric</td>
+        <td>M</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>RAG Knowledge Copilot (LLM + Vector Search)</td>
+        <td>RAG, vector search, LLM</td>
+        <td>M</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Document Intelligence</td>
+        <td>Document intelligence</td>
+        <td>M</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Regulatory Change Impact Analysis</td>
+        <td>Regulatory change</td>
+        <td>M</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Real-Time Event Backbone &amp; Autonomous Monitoring</td>
+        <td>Monitoring, real-time events</td>
+        <td>M–L</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>Multi-Agent Agentic Workflows (human-in-the-loop)</td>
+        <td>AI agents, multi-agent, agentic workflows</td>
+        <td>L</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>Compliance Knowledge Graph</td>
+        <td>Knowledge graph, intelligence</td>
+        <td>M</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>Policy Recommendation &amp; Drafting Engine</td>
+        <td>Policy recommendation</td>
+        <td>M</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td>Audit Intelligence &amp; tamper-evident evidence</td>
+        <td>Audit intelligence</td>
+        <td>M</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td>Predictive Compliance &amp; Risk Forecasting</td>
+        <td>Forecasting, predictive</td>
+        <td>M</td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td>Compliance Digital Twin &amp; Executive Decision Support</td>
+        <td>Digital twin, decision support</td>
+        <td>M</td>
+      </tr>
+      <tr>
+        <td>–</td>
+        <td>Cloud-Native Enterprise Platform (continuous)</td>
+        <td>Cloud-native</td>
+        <td>L</td>
+      </tr>
+    </table>
+
+    <h3>17.2 Capability details</h3>
+
+    <h4>1. Compliance Data Fabric &amp; Obligation Model</h4>
+    <ul>
+      <li>
+        <b>Value</b>: Regulation → Obligation → Control → Policy → Evidence →
+        Assessment traceability; prerequisite for everything else.
+      </li>
+      <li>
+        <b>Backend</b>: audit columns and @Version on all entities; Flyway;
+        transactional outbox; risk engine moved to intelligence-service.
+      </li>
+      <li>
+        <b>Database</b>: obligations, controls, control_obligation_map,
+        policy_control_map, evidence, risk_snapshots, outbox_events.
+      </li>
+      <li>
+        <b>Stack</b>: Flyway, Debezium / Spring Modulith events, JPA auditing,
+        PostgreSQL RLS.
+      </li>
+    </ul>
+
+    <h4>2. RAG Knowledge Copilot</h4>
+    <ul>
+      <li>
+        <b>Value</b>: cited answers across regulations, policies and evidence in
+        seconds.
+      </li>
+      <li>
+        <b>Architecture</b>: ai-orchestrator-service implementing
+        /assistant/ask; hybrid retrieval (vector + full-text, reciprocal rank
+        fusion) with ACL filtering.
+      </li>
+      <li>
+        <b>Backend</b>: Spring AI ChatClient + QuestionAnswerAdvisor;
+        Kafka-driven indexer (≈800-token chunks, 100 overlap); SSE streaming;
+        PII redaction and prompt-injection guard.
+      </li>
+      <li>
+        <b>Database</b>:
+        <code
+          >doc_chunks(…, embedding vector(1536), tsv tsvector, acl jsonb)</code
+        >
+        with HNSW + GIN; <code>ai_interactions</code>.
+      </li>
+      <li>
+        <b>Stack</b>: Spring AI, pgvector, Azure OpenAI or Ollama (llama3.1,
+        nomic-embed-text), RAGAS evaluation in CI.
+      </li>
+    </ul>
+
+    <h4>3. Document Intelligence</h4>
+    <ul>
+      <li>
+        <b>Value</b>: upload a regulation/policy PDF → extracted obligations,
+        deadlines, penalties → suggested control mappings.
+      </li>
+      <li>
+        <b>Backend</b>: document-service; Tika/PDFBox/Tesseract or Azure
+        Document Intelligence; Spring AI structured output
+        (ObligationCandidate); confidence &lt; 0.75 → review queue.
+      </li>
+      <li><b>Frontend</b>: upload wizard; split PDF/extraction review view.</li>
+      <li><b>Database</b>: documents, obligation_candidates.</li>
+    </ul>
+
+    <h4>4. Regulatory Change Impact Analysis</h4>
+    <ul>
+      <li>
+        <b>Value</b>: “Regulation amended → 7 policies, 12 controls, 3 owners
+        affected → draft remediation plan.”
+      </li>
+      <li>
+        <b>Backend</b>: semantic clause diff (ADDED/REMOVED/MODIFIED); impact
+        score = materiality × affected controls × current risk;
+        RegulatoryChangeDetected event.
+      </li>
+      <li><b>Frontend</b>: Change Radar with clause diff and impact graph.</li>
+      <li>
+        <b>Database</b>: regulation_versions, obligation_changes,
+        impact_assessments.
+      </li>
+    </ul>
+
+    <h4>5. Real-Time Event Backbone &amp; Autonomous Monitoring</h4>
+    <ul>
+      <li>
+        <b>Value</b>: continuous control monitoring instead of point-in-time
+        audits.
+      </li>
+      <li>
+        <b>Backend</b>: Kafka topics (policy, compliance, regulation,
+        control.signals, alerts); monitoring-service with declarative rules
+        (e.g. evidence &gt; 90 days, risk +20 in 24h); SSE push.
+      </li>
+      <li>
+        <b>Database</b>: monitoring_rules, alerts (with fingerprint
+        de-duplication).
+      </li>
+      <li>
+        <b>Stack</b>: Kafka/Redpanda, Spring Cloud Stream, Debezium, Drools,
+        Resilience4j.
+      </li>
+    </ul>
+
+    <h4>6. Multi-Agent Agentic Workflows</h4>
+    <ul>
+      <li>
+        <b>Agents</b>: Supervisor → Regulatory Analyst, Control Assessor, Policy
+        Drafter, Audit Agent, Reporter.
+      </li>
+      <li>
+        <b>Governance</b>: tools = existing REST APIs (Spring AI @Tool / MCP);
+        read tools autonomous, write tools require human approval; agent acts
+        with the user’s identity; token budgets.
+      </li>
+      <li>
+        <b>Frontend</b>: Agent Console with live step trace and approval cards.
+      </li>
+      <li><b>Database</b>: agent_runs, agent_steps.</li>
+    </ul>
+
+    <h4>7. Compliance Knowledge Graph</h4>
+    <ul>
+      <li>
+        <b>Model</b>: nodes Regulation, Obligation, Control, Policy, Evidence,
+        Owner, Risk, System; edges REQUIRES, SATISFIED_BY, IMPLEMENTS, PROVES,
+        OWNS, AFFECTS.
+      </li>
+      <li>
+        <b>Uses</b>: impact analysis, “test once comply many”, GraphRAG context
+        expansion.
+      </li>
+      <li>
+        <b>Stack</b>: Apache AGE (inside PostgreSQL) or Neo4j; React Flow /
+        Cytoscape.js.
+      </li>
+    </ul>
+
+    <h4>8. Policy Recommendation &amp; Drafting Engine</h4>
+    <ul>
+      <li>
+        Gap → AI-drafted, cited clause → redline vs. current policy → existing
+        approval workflow.
+      </li>
+      <li>
+        Database: policy_versions (author_type HUMAN/AI), clause_library (with
+        embeddings).
+      </li>
+    </ul>
+
+    <h4>9. Audit Intelligence</h4>
+    <ul>
+      <li>
+        Hash-chained, append-only audit_log; segregation-of-duties anomaly
+        detection; statistical sampling; one-click audit pack (PDF + ZIP with
+        SHA-256 manifest).
+      </li>
+    </ul>
+
+    <h4>10. Predictive Compliance &amp; Risk Forecasting</h4>
+    <ul>
+      <li>
+        Requires 8–12 weeks of risk_snapshots. Phase A: Holt-Winters
+        forecasting; Phase B: gradient-boosted “control fails in 90 days”
+        classifier with SHAP explanations.
+      </li>
+      <li>
+        Database: predictions, model_registry. Stack: Tribuo/Smile (Java) or
+        FastAPI + LightGBM + MLflow.
+      </li>
+    </ul>
+
+    <h4>11. Compliance Digital Twin &amp; Executive Decision Support</h4>
+    <ul>
+      <li>
+        Snapshot the model, apply scenario mutations (remediate controls, add
+        regulation), re-run engines, compare before/after; optimiser suggests
+        best remediation for a budget.
+      </li>
+      <li>
+        Database: scenarios, decisions. Stack: pure Java domain engine, Timefold
+        (OptaPlanner).
+      </li>
+    </ul>
+
+    <h4>Cloud-Native Enterprise Platform (cross-cutting)</h4>
+    <ul>
+      <li>
+        Keycloak OIDC; JWT at gateway; OAuth2 client-credentials between
+        services.
+      </li>
+      <li>Multi-tenancy via tenant_id + PostgreSQL row-level security.</li>
+      <li>
+        OpenTelemetry → Grafana / Tempo / Prometheus / Loki; LLM token, cost and
+        quality metrics.
+      </li>
+      <li>
+        Docker Compose (dev), Kubernetes + Helm + Argo CD (prod), Vault for
+        secrets, HPA on AI services.
+      </li>
+      <li>
+        CI: GitHub Actions, Testcontainers, RAG evaluation gate, OWASP
+        dependency check, signed images + SBOM.
+      </li>
+      <li>
+        AI governance: prompt registry, model allow-list, PII redaction, EU AI
+        Act use-case register.
+      </li>
+    </ul>
+
+    <h3>17.3 Target architecture</h3>
+    <pre>
+React Platform UI --(JWT, SSE)--&gt; API Gateway (Spring Cloud Gateway + Keycloak)
+     |-- Policy / Regulation / Compliance / Report / User services --(Outbox)--&gt; Kafka
+     |-- Intelligence Service (risk, maturity, forecasting, digital twin)
+     |-- AI Orchestrator (Spring AI agents + RAG) --&gt; Azure OpenAI / Ollama
+     |-- Document Service (Tika / Azure Document Intelligence) --&gt; Kafka
+Kafka --&gt; Monitoring Service (rules, alerts --SSE--&gt; UI)
+Kafka --&gt; Indexer (chunk + embed) --&gt; PostgreSQL + pgvector  |  Apache AGE graph
+Observability: OpenTelemetry --&gt; Grafana / Tempo / Loki / Prometheus
+</pre
+    >
+
+    <h3>17.4 Delivery phases</h3>
+    <table>
+      <tr>
+        <th>Phase</th>
+        <th>Scope</th>
+      </tr>
+      <tr>
+        <td>Foundation</td>
+        <td>Data fabric, Flyway, outbox, Keycloak</td>
+      </tr>
+      <tr>
+        <td>AI Core</td>
+        <td>RAG Copilot + pgvector; Document Intelligence</td>
+      </tr>
+      <tr>
+        <td>Differentiators</td>
+        <td>
+          Knowledge graph; Regulatory change impact; Event backbone + monitoring
+        </td>
+      </tr>
+      <tr>
+        <td>Agentic</td>
+        <td>Multi-agent + human approval; Policy drafting engine</td>
+      </tr>
+      <tr>
+        <td>Foresight</td>
+        <td>Audit intelligence; Forecasting + Digital twin</td>
+      </tr>
+    </table>
+    <p>
+      <b>Highest-ROI demo path:</b> 1 → 2 → 3 → 4 — upload a regulation PDF,
+      obligations are extracted, the Copilot answers with clause citations,
+      Change Radar shows impacted policies via the graph, an agent drafts
+      remediation, a human approves it in the existing workflow, and the health
+      score updates live.
+    </p>
+
+    <!-- ===================================================== -->
+    <h2>18. File Inventory</h2>
+    <h3>18.1 Frontend (legal-compliance-ui/src)</h3>
+    <table>
+      <tr>
+        <th>File</th>
+        <th>Responsibility</th>
+      </tr>
+      <tr>
+        <td>App.js</td>
+        <td>
+          Providers and role-guarded route table generated from navigation
+          config
+        </td>
+      </tr>
+      <tr>
+        <td>api/httpClient.js</td>
+        <td>
+          Axios instance: base URL, 10s timeout, X-Correlation-Id, error
+          normalisation
+        </td>
+      </tr>
+      <tr>
+        <td>config/navigation.js</td>
+        <td>Sidebar sections, routes, icons, roles</td>
+      </tr>
+      <tr>
+        <td>context/ThemeContext.jsx</td>
+        <td>Dark/light theme</td>
+      </tr>
+      <tr>
+        <td>context/RoleContext.jsx</td>
+        <td>Persona roles and hasRole()</td>
+      </tr>
+      <tr>
+        <td>context/PlatformDataContext.jsx</td>
+        <td>
+          Snapshot loading, auto-refresh, intelligence memoisation, degraded
+          flag
+        </td>
+      </tr>
+      <tr>
+        <td>engine/riskEngine.js</td>
+        <td>
+          classifyStatus, scoreAssessment, riskLevel, healthBand,
+          buildIntelligence, recommendations, maturity
+        </td>
+      </tr>
+      <tr>
+        <td>engine/workflowEngine.js</td>
+        <td>
+          STAGES, TRANSITIONS, deriveStage, availableTransitions,
+          applyTransition
+        </td>
+      </tr>
+      <tr>
+        <td>engine/copilotEngine.js</td>
+        <td>answerLocally – intents, entity answers, citations</td>
+      </tr>
+      <tr>
+        <td>engine/engines.test.js</td>
+        <td>Unit tests for all engines</td>
+      </tr>
+      <tr>
+        <td>services/dashboardService.js</td>
+        <td>PLATFORM_SERVICES, getPlatformSnapshot, getDashboardData</td>
+      </tr>
+      <tr>
+        <td>services/assistantService.js</td>
+        <td>askCopilot – local/remote mode with fallback</td>
+      </tr>
+      <tr>
+        <td>services/*Service.js</td>
+        <td>Per-register API calls via shared client</td>
+      </tr>
+      <tr>
+        <td>layouts/AppShell.jsx, Sidebar.jsx, Topbar.jsx</td>
+        <td>Enterprise shell</td>
+      </tr>
+      <tr>
+        <td>components/CommandPalette.jsx</td>
+        <td>Global search (⌘K)</td>
+      </tr>
+      <tr>
+        <td>components/CopilotDrawer.jsx</td>
+        <td>Copilot chat UI</td>
+      </tr>
+      <tr>
+        <td>components/RequireRole.jsx</td>
+        <td>Route guard</td>
+      </tr>
+      <tr>
+        <td>components/charts/Charts.jsx</td>
+        <td>Gauge, DonutChart, BarList, RadarChart</td>
+      </tr>
+      <tr>
+        <td>components/ui/Icon.jsx, Primitives.jsx</td>
+        <td>Icons and UI building blocks</td>
+      </tr>
+      <tr>
+        <td>pages/*.jsx</td>
+        <td>
+          CommandCenter, Analytics, RiskHeatmap, GapAnalysis, PolicyWorkflow,
+          AuditTimeline, ExecutiveReport + registers
+        </td>
+      </tr>
+      <tr>
+        <td>styles/theme.css</td>
+        <td>
+          Design tokens, components, dark mode, responsive and print styles
+        </td>
+      </tr>
+    </table>
+    <h3>18.2 Backend (services/)</h3>
+    <table>
+      <tr>
+        <th>Path</th>
+        <th>Content</th>
+      </tr>
+      <tr>
+        <td>api-gateway/</td>
+        <td>ApiGatewayApplication, CorsConfig, route configuration</td>
+      </tr>
+      <tr>
+        <td>policy-service/</td>
+        <td>
+          Policy entity, PolicyResponseDTO, PolicyRepository, PolicyService,
+          PolicyController, GlobalExceptionHandler, OpenApiConfig
+        </td>
+      </tr>
+      <tr>
+        <td>regulation-service/</td>
+        <td>
+          Regulation entity, controller, service, repository, exception
+          handling, OpenAPI
+        </td>
+      </tr>
+      <tr>
+        <td>compliance-service/</td>
+        <td>Compliance entity, controller, service, repository</td>
+      </tr>
+      <tr>
+        <td>report-service/</td>
+        <td>Report entity, controller, service, repository</td>
+      </tr>
+      <tr>
+        <td>user-service/</td>
+        <td>User entity, controller, service, repository, OpenAPI</td>
+      </tr>
+      <tr>
+        <td>database/schema.sql</td>
+        <td>Original (older) schema design</td>
+      </tr>
+    </table>
+
+    <!-- ===================================================== -->
+    <h2>19. Glossary</h2>
+    <table>
+      <tr>
+        <th>Term</th>
+        <th>Meaning</th>
+      </tr>
+      <tr>
+        <td>GRC</td>
+        <td>Governance, Risk and Compliance</td>
+      </tr>
+      <tr>
+        <td>Assessment</td>
+        <td>
+          A Compliance record linking a policy to a regulation with a status and
+          remarks
+        </td>
+      </tr>
+      <tr>
+        <td>Residual risk</td>
+        <td>Risk remaining after current controls, 0–100</td>
+      </tr>
+      <tr>
+        <td>Health Score</td>
+        <td>100 − average residual risk</td>
+      </tr>
+      <tr>
+        <td>Maturity Index</td>
+        <td>Weighted 0–100 score mapped to CMMI-style levels 1–5</td>
+      </tr>
+      <tr>
+        <td>Coverage gap</td>
+        <td>Regulation or policy with no assessment</td>
+      </tr>
+      <tr>
+        <td>Control gate</td>
+        <td>Workflow rule blocking approval while high risks are open</td>
+      </tr>
+      <tr>
+        <td>Maker-checker</td>
+        <td>
+          Separation between the person who prepares and the person who approves
+        </td>
+      </tr>
+      <tr>
+        <td>RAG</td>
+        <td>
+          Retrieval-Augmented Generation – LLM answers grounded in retrieved
+          documents
+        </td>
+      </tr>
+      <tr>
+        <td>Vector search</td>
+        <td>Similarity search over embeddings (pgvector)</td>
+      </tr>
+      <tr>
+        <td>Outbox pattern</td>
+        <td>
+          Writing domain events in the same DB transaction, then publishing them
+          reliably
+        </td>
+      </tr>
+      <tr>
+        <td>Correlation ID</td>
+        <td>Unique request id propagated across services for tracing</td>
+      </tr>
+      <tr>
+        <td>CMMI</td>
+        <td>Capability Maturity Model Integration</td>
+      </tr>
+      <tr>
+        <td>HITL</td>
+        <td>Human-in-the-loop approval of AI actions</td>
+      </tr>
+    </table>
+
+    <p style="margin-top: 40px; color: #6b7280; font-size: 9pt">
+      End of document – LexComply Intelligence POC Documentation v1.0
+    </p>
+  </body>
+</html>

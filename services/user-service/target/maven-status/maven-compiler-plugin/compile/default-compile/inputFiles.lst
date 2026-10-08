@@ -1,0 +1,6 @@
+/Users/sa20712762/legal-compliance-assistant/services/user-service/src/main/java/com/saksham/userservice/UserServiceApplication.java
+/Users/sa20712762/legal-compliance-assistant/services/user-service/src/main/java/com/saksham/userservice/config/OpenApiConfig.java
+/Users/sa20712762/legal-compliance-assistant/services/user-service/src/main/java/com/saksham/userservice/controller/UserController.java
+/Users/sa20712762/legal-compliance-assistant/services/user-service/src/main/java/com/saksham/userservice/entity/User.java
+/Users/sa20712762/legal-compliance-assistant/services/user-service/src/main/java/com/saksham/userservice/repository/UserRepository.java
+/Users/sa20712762/legal-compliance-assistant/services/user-service/src/main/java/com/saksham/userservice/service/UserService.java

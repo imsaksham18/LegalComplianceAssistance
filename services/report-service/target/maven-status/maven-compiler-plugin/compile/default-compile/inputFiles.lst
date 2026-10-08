@@ -1,0 +1,6 @@
+/Users/sa20712762/legal-compliance-assistant/services/report-service/src/main/java/com/saksham/reportservice/ReportServiceApplication.java
+/Users/sa20712762/legal-compliance-assistant/services/report-service/src/main/java/com/saksham/reportservice/config/OpenApiConfig.java
+/Users/sa20712762/legal-compliance-assistant/services/report-service/src/main/java/com/saksham/reportservice/controller/ReportController.java
+/Users/sa20712762/legal-compliance-assistant/services/report-service/src/main/java/com/saksham/reportservice/entity/Report.java
+/Users/sa20712762/legal-compliance-assistant/services/report-service/src/main/java/com/saksham/reportservice/repository/ReportRepository.java
+/Users/sa20712762/legal-compliance-assistant/services/report-service/src/main/java/com/saksham/reportservice/service/ReportService.java
